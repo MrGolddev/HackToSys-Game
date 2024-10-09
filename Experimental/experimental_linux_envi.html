@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>mission 2 : DDos attack</title>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #1e1e1e;
+            font-family: 'Courier New', Courier, monospace;
+            user-select: none;
+            overflow: hidden;
+        }
+
+        .desktop {
+            width: 100%;
+            height: 100%;
+            background-size: cover;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .window {
+            position: absolute;
+            width: 600px;
+            background-color: #000;
+            border: 2px solid #5c5c5c;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+            resize: both;
+            overflow: hidden;
+        }
+
+        .window-header {
+            background-color: #4b4b4b;
+            color: #ffffff;
+            padding: 5px;
+            cursor: move;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .window-controls {
+            display: flex;
+            gap: 5px;
+        }
+
+        .window-controls button {
+            width: 15px;
+            height: 15px;
+            background-color: #ff7d7d;
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+
+        .window-controls button.minimize {
+            background-color: #ffff5d;
+        }
+
+        #terminal {
+            white-space: pre;
+            overflow-y: auto;
+            height: 300px;
+            border-top: 1px solid #4b4b4b;
+            padding: 10px;
+            color: #ebebeb;
+        }
+
+        #input-container {
+            display: flex;
+            align-items: center;
+            padding: 5px;
+        }
+
+        #prefix {
+            color: #6683d4;
+            font-size: 16px;
+            padding-right: 5px;
+        }
+
+        #input {
+            flex-grow: 1;
+            background: #000;
+            color: #ffffff;
+            border: none;
+            outline: none;
+            font-size: 16px;
+            padding: 5px;
+        }
+
+        #web-browser-content {
+            height: 100%;
+            background-color: #ffffff;
+            color: #000;
+            padding: 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            font-size: 18px;
+        }
+
+        .unreachable-message {
+            display: none;
+            color: red;
+        }
+    </style>
+</head>
+<body>
+    <div class="desktop">
+        <!-- Terminal Window -->
+        <div class="window" id="terminal-window">
+            <div class="window-header" id="terminal-header">
+                <span>Terminal</span>
+                <div class="window-controls">
+                    <button class="minimize"></button>
+                    <button class="close"></button>
+                </div>
+            </div>
+            <div id="terminal"></div>
+            <div id="input-container">
+                <span id="prefix">root@HackToSys:~/home ></span>
+                <input id="input" type="text" autofocus placeholder="Type your command..." />
+            </div>
+        </div>
+
+        <!-- Web Browser Window -->
+        <div class="window" id="web-browser-window" style="left: 650px; top: 0;">
+            <div class="window-header" id="web-browser-header">
+                <span>Web Browser</span>
+                <div class="window-controls">
+                    <button class="minimize"></button>
+                    <button class="close"></button>
+                </div>
+            </div>
+            <div id="web-browser-content">
+                <div id="website-content">
+                    <p>Welcome to <strong>unnxm3.xyz</strong>! This is the homepage of the simulated website.</p>
+                </div>
+                <div class="unreachable-message" id="unreachable-message">
+                    <p>Website unreachable. Please check your connection.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const terminal = document.getElementById('terminal');
+        const input = document.getElementById('input');
+        const terminalWindow = document.getElementById('terminal-window');
+        const windowHeader = document.getElementById('terminal-header');
+        const webBrowserWindow = document.getElementById('web-browser-window');
+        const webBrowserHeader = document.getElementById('web-browser-header');
+        const websiteContent = document.getElementById('website-content');
+        const unreachableMessage = document.getElementById('unreachable-message');
+        let isDraggingTerminal = false;
+        let isDraggingBrowser = false;
+        let offsetX, offsetY;
+
+        // Dragging functionality for terminal
+        windowHeader.addEventListener('mousedown', (e) => {
+            isDraggingTerminal = true;
+            offsetX = e.clientX - terminalWindow.offsetLeft;
+            offsetY = e.clientY - terminalWindow.offsetTop;
+        });
+
+        document.addEventListener('mouseup', () => {
+            isDraggingTerminal = false;
+            isDraggingBrowser = false;
+        });
+
+        document.addEventListener('mousemove', (e) => {
+            if (isDraggingTerminal) {
+                terminalWindow.style.left = `${e.clientX - offsetX}px`;
+                terminalWindow.style.top = `${e.clientY - offsetY}px`;
+            } else if (isDraggingBrowser) {
+                webBrowserWindow.style.left = `${e.clientX - offsetX}px`;
+                webBrowserWindow.style.top = `${e.clientY - offsetY}px`;
+            }
+        });
+
+        // Dragging functionality for web browser
+        webBrowserHeader.addEventListener('mousedown', (e) => {
+            isDraggingBrowser = true;
+            offsetX = e.clientX - webBrowserWindow.offsetLeft;
+            offsetY = e.clientY - webBrowserWindow.offsetTop;
+        });
+
+        // Show welcome message on load
+        function showWelcomeMessage() {
+            const welcomeText = `
+HackToSys Shell
+Copyright (C) Solarise.lol All rights reserved.
+|| HackToSys has been updated to the latest version ||
+
+Type "help" to see available commands
+`;
+            appendToTerminal(welcomeText);
+        }
+
+        function appendToTerminal(text) {
+            terminal.textContent += text;
+            terminal.scrollTop = terminal.scrollHeight;
+        }
+
+        function handleCommand(command) {
+            const pingOnceRegex = /ping\s+([\w.-]+\.\w+)/;
+            const nmapRegex = /nmap\s+(-p\s+)?([\w.-]+\.\w+)/;
+            const penTestRegex = /PenTest\s+([\w.-]+)/;
+            const lsRegex = /ls/;
+            const mkdirRegex = /mkdir\s+([\w.-]+)/;
+            const touchRegex = /touch\s+([\w.-]+)/;
+            const rmRegex = /rm\s+([\w.-]+)/;
+            const helpRegex = /help/;
+
+            if (pingOnceRegex.test(command)) {
+                const domain = command.match(pingOnceRegex)[1];
+                const time = Math.floor(Math.random() * (250 - 75 + 1)) + 75;
+                ping(domain, time);
+            } else if (nmapRegex.test(command)) {
+                const domain = command.match(nmapRegex)[2];
+                nmap(domain);
+            } else if (lsRegex.test(command)) {
+                listFiles();
+            } else if (mkdirRegex.test(command)) {
+                const dirname = command.match(mkdirRegex)[1];
+                appendToTerminal(`Created directory '${dirname}'\n`);
+            } else if (touchRegex.test(command)) {
+                const filename = command.match(touchRegex)[1];
+                createFile(filename);
+            } else if (rmRegex.test(command)) {
+                const filename = command.match(rmRegex)[1];
+                deleteFile(filename);
+            } else if (penTestRegex.test(command)) {
+                const domain = command.match(penTestRegex)[1];
+                penTest(domain);  // Call the penTest function here
+            } else if (helpRegex.test(command)) {
+                showHelp();
+            } else {
+                appendToTerminal(`bash: ${command}: Not found | 403 Forbidden\n`);
+            }
+        }
+
+        function penTest(domain) {
+            appendToTerminal(`\n█████████████████████████████████████████████\n`);
+            appendToTerminal(`█▄─▄▄─█▄─▄▄─█▄─▀█▄─▄█─▄─▄─█▄─▄▄─█─▄▄▄▄█─▄─▄─█\n`);
+            appendToTerminal(`██─▄▄▄██─▄█▀██─█▄▀─████─████─▄█▀█▄▄▄▄─███─███\n`);
+            appendToTerminal(`▀▄▄▄▀▀▀▄▄▄▄▄▀▄▄▄▀▀▄▄▀▀▄▄▄▀▀▄▄▄▄▄▀▄▄▄▄▄▀▀▄▄▄▀▀\n`);
+            appendToTerminal(`Stress to ${domain},\n`);
+
+let pingTime = 0;
+const intervalId = setInterval(() => {
+    pingTime += 120; // Increment ping time
+    ping(domain, pingTime);
+
+    if (pingTime >= 1670) { // Stop pinging after reaching 2670ms
+        clearInterval(intervalId);
+        
+        // Simulate 20 unreachable responses
+        for (let i = 0; i < 20; i++) {
+            const response = `Couldn't get reply from ${domain}, last pinged: ${pingTime}ms\n`;
+            setTimeout(() => {
+                appendToTerminal(response);
+            }, 200 * (i + 1)); // Delay each response by 200ms
+        }
+
+        // Show the unreachable message after all unreachable responses
+        setTimeout(() => {
+            unreachableMessage.style.display = 'block';
+            websiteContent.style.display = 'none';
+            fadeToBlack(); // Call fadeToBlack function after displaying unreachable message
+        }, 4000); // Display 'Unable to connect' after 4 seconds
+    }
+}, 900); // Interval between pings
+
+function ping(domain, time) {
+    // Display the initial ping message only once
+    if (time === 120) {
+        appendToTerminal(`Pinging ${domain} with 32 bytes of data:\n`);
+    }
+
+    // Simulate 6 successful responses with the specified delay
+    for (let i = 0; i < 6; i++) {
+        const response = `Reply from ${domain}: bytes=32 time=${time}ms\n`;
+        setTimeout(() => {
+            appendToTerminal(response);
+        }, 200 * (i + 1)); // Delay each response by 200ms
+    }
+}
+
+// Function to handle fade to black effect
+function fadeToBlack() {
+    const fadeOut = document.createElement('div'); // Create a fadeOut div
+    fadeOut.style.position = 'fixed';
+    fadeOut.style.top = 0;
+    fadeOut.style.left = 0;
+    fadeOut.style.width = '100%';
+    fadeOut.style.height = '100%';
+    fadeOut.style.backgroundColor = 'black';
+    fadeOut.style.opacity = 0;
+    fadeOut.style.transition = 'opacity 3s';
+    document.body.appendChild(fadeOut); // Append fadeOut div to the body
+
+    setTimeout(() => {
+        fadeOut.style.opacity = 1; // Fade to black
+    }, 100); // Start fading after a short delay
+
+    setTimeout(() => {
+        window.location.href = 'game_3.html'; // Redirect after 3 seconds
+    }, 3000); // Wait for fade to complete before redirecting
+}
+
+
+}
+
+
+        function nmap(domain) {
+            appendToTerminal(`Running nmap on ${domain}...\n`);
+        }
+
+        function listFiles() {
+            appendToTerminal(`file1.txt\nfile2.txt\ndirectory1\n`);
+        }
+
+        function createFile(filename) {
+            appendToTerminal(`Created file '${filename}'\n`);
+        }
+
+        function deleteFile(filename) {
+            appendToTerminal(`Deleted file '${filename}'\n`);
+        }
+
+        function showHelp() {
+            const helpText = `
+HackToSys | UNNXM3 Server
+help - Show this page
+nmap (-p,-sV Optional) *.{website}/*
+ping *.{website}/*
+PenTest {website} - Denial Service
+ls - List files in the current directory
+mkdir {directory name} - Create a new directory
+touch {filename} - Create a new file
+rm {filename} - Delete a file
+`;
+            appendToTerminal(helpText);
+        }
+
+        // Input handling
+        input.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') {
+                const command = input.value.trim();
+                if (command) {
+                    appendToTerminal(`> ${command}\n`);
+                    handleCommand(command);
+                    input.value = '';
+                }
+            }
+        });
+
+        // Close button functionality
+        document.querySelectorAll('.close').forEach(button => {
+            button.addEventListener('click', () => {
+                button.closest('.window').style.display = 'none';
+            });
+        });
+
+        // Minimize button functionality
+        document.querySelectorAll('.minimize').forEach(button => {
+            button.addEventListener('click', () => {
+                const window = button.closest('.window');
+                window.style.display = window.style.display === 'none' ? 'block' : 'none';
+            });
+        });
+
+        // Show welcome message on load
+        showWelcomeMessage();
+    </script>
+</body>
+</html>
