@@ -1,6 +1,6 @@
 # HackToSys
 
-**Owner:** mrgolddev, mrgoldtech
+**Owner:** mrgolddev, dsplay
 
 Welcome to the Hacking Game! This project is a fun and interactive way to simulate hacking scenarios using web technologies.
 
