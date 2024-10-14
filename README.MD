@@ -1,37 +1,46 @@
-**For the live version, checkout Solarises's organization page. To find the live version here's the link for it**
-[https://github.com/Solarises/HackToSys/tree/main]
-# HackToSys
+# HackToSys | Technology  / Pentest
+# Please Read:
+This project is consider a public domain, but credit is apprechiated. You can use the original project and use it commercially, but editing the project and using it commercially is very prohibited.
+By using this project, You already consent to this rule. Neither, Solarise, Dsplay, MrGoldDev, would taken any responsibility for any damages for  using this project for your benefits.
+If you want to use it commercially, Please contact solarise@privacys.space | We will consider every request.
 
-**Owner:** mrgolddev, dsplay
+# Developers: **MrGoldDev**, **Dsplay** and with the help of Siamgame.org
 
-Welcome to the Hacking Game! This project is a fun and interactive way to simulate hacking scenarios using web technologies.
+**Exceptions: Siamgame.org can use this project in their favor, This project is allowed on their website entirely, Feel'd free to check out their website after this.**
 
-## Description
+**HackToSys** is an open-source, interactive game designed to introduce players to the world of ethical hacking. The game simulates real-world penetration testing (pentesting) scenarios, providing hands-on experience in identifying and exploiting system vulnerabilities. HackToSys serves as an educational platform for aspiring white hat hackers (ethical hackers) and anyone interested in learning about system security in a fun, engaging way.
 
-The Hacking Game is a browser-based simulation that immerses players in the world of hacking. Engage in various simulated hacking activities, where you can send pings to multiple domains and receive realistic network responses. 
+The primary goal is to equip players with practical knowledge and skills used by penetration testers to legally and responsibly assess and secure systems. The game features multiple missions that increase in difficulty, challenging players to apply various hacking techniques and security strategies.
 
-### Features
+## Features
 
-- **Interactive Gameplay:** Navigate through a series of challenges and missions.
-- **Simulated Network Responses:** Experience the thrill of hacking with realistic pings and responses.
-- **Mission Completion:** Solve puzzles and complete tasks to advance through the game.
+- **Realistic Pentesting Simulation**: Players simulate ethical hacking techniques to identify and exploit system vulnerabilities.
+- **Terminal-Based Gameplay**: Interact through a terminal interface, executing commands like a real-life pentester.
+- **Mission-Based Structure**: Progress through increasingly challenging levels as you develop your hacking skills.
+- **Educational Focus**: Learn core ethical hacking concepts, such as vulnerability scanning, network security, and password cracking.
+- **Open-Source Collaboration**: Contribute to the project by reporting issues, suggesting new features, or submitting pull requests.
 
-## Technologies Used
+## Current Status: In Development
 
-- **HTML:** For structuring the game interface.
-- **CSS:** To style the game and enhance user experience.
-- **JavaScript:** To implement game logic and interactivity.
+HackToSys is currently under active development, and we are constantly working on adding new features, levels, and educational content.
 
-## Getting Started
+## Try It Live
 
-To play the game, simply clone the repository and open the `index.html` file in your web browser. 
+You don't need to run the game locally! A live version is available for you to play here:
 
-### Prerequisites
+[**hacktosys.pages.dev**](https://hacktosys.pages.dev)
 
-- A modern web browser (Chrome, Firefox, Safari, etc.)
+## How to Contribute
 
-### Installation
+We welcome contributions from the community! If you have ideas for new features, improvements, or educational content, feel free to fork the repository and submit a pull request. Contributions that enhance gameplay, add learning content, or optimize performance are greatly appreciated.
 
-1. Clone the repository:
-   ```bash
-   git clone https://github.com/yourusername/HackToSys.git
+To contribute:
+1. Fork this repository.
+2. Create a new branch (`git checkout -b feature/YourFeature`).
+3. Make your changes and commit them (`git commit -m 'Add new feature'`).
+4. Push to your branch (`git push origin feature/YourFeature`).
+5. Open a Pull Request.
+
+## License
+
+This project is licensed under the Creative Commons Legal Code **CC0 1.0 Universal**. For more information, see the [LICENSE](LICENSE) file.
