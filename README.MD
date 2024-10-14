@@ -1,4 +1,5 @@
-**For the live version, checkout Solarises's organization page. To find the live version [https://github.com/Solarises/HackToSys/tree/main](here.)**
+**For the live version, checkout Solarises's organization page. To find the live version here's the link for it**
+[https://github.com/Solarises/HackToSys/tree/main]
 # HackToSys
 
 **Owner:** mrgolddev, dsplay
